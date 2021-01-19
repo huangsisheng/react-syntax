@@ -1,0 +1,81 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-01-19 21:19:27
+ * @LastEditTime: 2021-01-19 22:49:44
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \react-base\html\01hello.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@17.0.1/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.1/umd/react-dom.development.js"></script>
+    <!-- jsx库 -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        .title {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        /**
+          * 组件&props
+          * 总结：
+          * 1.组件名称必须大写
+          * 2.props只读性
+        **/
+
+        /* a.函数组件与class组件*/
+        /* 这类组件被称为“函数组件”，因为它本质上就是 JavaScript 函数。
+        function Welcome(props) {
+            const { name } = props
+            return <h1>Hello {name}</h1>
+        } */
+
+        // ES6 class组件，从React.Component中扩展一个组件
+        class Welcome extends React.Component {
+            render() {
+                const { name, job } = this.props
+                return <h1>名字:{name} 职位:{job}</h1>
+            }
+        }
+
+        /* 当 React 元素为用户自定义组件时，它会将 JSX 所接收的属性（attributes）
+        以及子组件（children）转换为单个对象传递给组件，这个对象被称之为 “props”。 */
+        // 组件名称必须以大写字母开头，react会把小写字母开头的组件视为元素dom标签
+        const element = <Welcome name="王麻子" job="程序员" />
+
+        /* b.组合组件 */
+        class App extends React.Component {
+            render() {
+                return (
+                    <div>
+                        <Welcome name="tom" job="程序员" />
+                        <Welcome name="jack" job="CTO" />
+                        <Welcome name="mary" job="董事长" />
+                        <p>所有 React 组件都必须像纯函数一样保护它们的 props 不被更改。</p>
+                    </div>
+                )
+            }
+        }
+
+        /* c.提取组件 */
+        // https://zh-hans.reactjs.org/docs/components-and-props.html
+
+        /* d.props 的只读性 */
+        // 所有 React 组件都必须像纯函数一样保护它们的 props 不被更改。
+        // 参见vuede 单向数据流；如果被更改会导致其他引用的组件都受影响，且数据流向难以理解
+        ReactDOM.render(<App />, document.getElementById('root'))
+    </script>
+</body>
+
+</html>

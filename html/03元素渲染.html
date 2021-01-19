@@ -1,0 +1,65 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-01-19 21:19:27
+ * @LastEditTime: 2021-01-19 22:50:15
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \react-base\html\01hello.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@17.0.1/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.1/umd/react-dom.development.js"></script>
+    <!-- jsx库 -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        .title {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        /**
+          * 元素渲染
+          * 总结
+          * 1.想要将一个 React 元素渲染到根 DOM 节点中，只需把它们一起传入 ReactDOM.render()
+        **/
+
+        /* const object = {
+            name: "张三",
+            doing: '正在学习react'
+        }
+        function peopelWhat(obj) {
+            return (<span>
+                我是 <strong>{obj.name}</strong>,
+                我<strong>{obj.doing}</strong>
+            </span>)
+        }
+
+        // jsx表示对象
+        const element = React.createElement(
+            'h1',
+            { className: 'title' },
+            '努力学习！'
+        ) */
+        function tick(params) {
+            ReactDOM.render(
+                <div>
+                    It is {new Date().toLocaleTimeString()}
+                </div>,
+                document.getElementById('root')
+            )    
+        }
+        setInterval(tick,1000);
+    </script>
+</body>
+
+</html>
