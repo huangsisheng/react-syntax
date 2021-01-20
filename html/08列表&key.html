@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-01-19 21:19:27
- * @LastEditTime: 2021-01-20 18:04:46
+ * @LastEditTime: 2021-01-20 22:36:48
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \react-base\html\01hello.html
@@ -13,10 +13,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://unpkg.com/react@17.0.1/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@17.0.1/umd/react-dom.development.js"></script>
-    <!-- jsx库 -->
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="../js/reactDev.js"></script>
+    <script src="../js/reactDom.js"></script>
+    <script src="../js/reactBabel.js"></script>
     <style>
         .warn {
             color: red;
@@ -30,7 +29,7 @@
         /**
           * 08列表&key
           * 总结：
-          * 1、
+          * 1、key 只是在兄弟节点之间必须唯一
         **/
 
         // 1.渲染多个组件
@@ -40,13 +39,38 @@
 
         // 2.基础列表组件
         function NumberList(props) {
-            const {lists} = props
+            const { lists } = props
             const lis = lists.map(item => <li key={item.toString()}>{item}</li>)
             return (
                 <ul>{lis}</ul>
-            )   
+            )
         }
-        ReactDOM.render(<NumberList lists={numbers}/>, document.getElementById('root'))
+        ReactDOM.render(<NumberList lists={numbers} />, document.getElementById('root'))
+
+        // 3.key
+        // 如果列表项目的顺序可能会变化，我们不建议使用索引来用作 key 值 diff算法
+
+        // 4.用key提取组件/在jsx插入map()
+        function KeyListItem(props) {
+            return <li>{props.value}</li>
+        }
+
+        function KeyList(props) {
+            const { numbers } = props
+            // 在组件中添加key，参见购物车商品
+            // const itemCom = numbers.map((item) =>
+            //     <KeyListItem value={item} key={item} />
+            // )
+            // return (<ul>{itemCom}</ul>)
+            return (<ul>
+                {
+                    numbers.map((item) =>
+                        <KeyListItem value={item} key={item} />
+                    )
+                }
+            </ul>)
+        }
+        ReactDOM.render(<KeyList numbers={numbers} />, document.getElementById('root'))
     </script>
 </body>
 
