@@ -1,0 +1,53 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-01-19 21:19:27
+ * @LastEditTime: 2021-01-20 18:04:46
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \react-base\html\01hello.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@17.0.1/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.1/umd/react-dom.development.js"></script>
+    <!-- jsx库 -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        .warn {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        /**
+          * 08列表&key
+          * 总结：
+          * 1、
+        **/
+
+        // 1.渲染多个组件
+        const numbers = [1, 2, 3, 4, 5]
+        const listItems = numbers.map((item) => <li key={item.toString()}>{item}</li>)
+        ReactDOM.render(<ul>{listItems}</ul>, document.getElementById('root'))
+
+        // 2.基础列表组件
+        function NumberList(props) {
+            const {lists} = props
+            const lis = lists.map(item => <li key={item.toString()}>{item}</li>)
+            return (
+                <ul>{lis}</ul>
+            )   
+        }
+        ReactDOM.render(<NumberList lists={numbers}/>, document.getElementById('root'))
+    </script>
+</body>
+
+</html>

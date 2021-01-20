@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-01-19 21:19:27
- * @LastEditTime: 2021-01-19 22:49:44
+ * @LastEditTime: 2021-01-20 16:09:51
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \react-base\html\01hello.html
@@ -18,9 +18,6 @@
     <!-- jsx库 -->
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <style>
-        .title {
-            color: red;
-        }
     </style>
 </head>
 
@@ -73,7 +70,7 @@
 
         /* d.props 的只读性 */
         // 所有 React 组件都必须像纯函数一样保护它们的 props 不被更改。
-        // 参见vuede 单向数据流；如果被更改会导致其他引用的组件都受影响，且数据流向难以理解
+        // 参见vue 的单向数据流；如果被更改会导致其他引用的组件都受影响，且数据流向难以理解
         ReactDOM.render(<App />, document.getElementById('root'))
     </script>
 </body>

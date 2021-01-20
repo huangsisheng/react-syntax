@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-01-19 21:19:27
- * @LastEditTime: 2021-01-19 22:51:45
+ * @LastEditTime: 2021-01-20 16:09:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \react-base\html\01hello.html
@@ -18,9 +18,6 @@
     <!-- jsx库 -->
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <style>
-        .title {
-            color: red;
-        }
     </style>
 </head>
 
@@ -29,8 +26,86 @@
     <script type="text/babel">
         /**
           * state&生命周期
+          * 总结：
+          * 1.不要直接修改state, 使用setState()
           * 
+          * 2.state可能是异步更新
+          * 要解决这个问题，可以让 setState() 接收一个函数而不是一个对象。这个函数用上一个 state 作为第一个参数，将此次更新被应用时的 props 做为第二个参数：
+          * this.setState((state,props) =>({counter:state.counter + props+increment}))
+          * 
+          * 3.state更新会被合并
+          * 4.不要直接修改state, 使用setState()
+          * 5.数据流向：自上而下
         **/
+        // 实现一个完整版的计时器
+
+        // 1.创建class组件
+        /* class Clock extends React.Component{
+            render(){
+                return (
+                    <div>
+                        <p>Hello !!!</p>
+                        <p>It is {this.props.date.toLocaleTimeString()}</p>
+                    </div>
+                )
+            }
+        } */
+
+        // 2.向class组件添加局部state =>
+        /* class Clock extends React.Component {
+            constructor(props) {
+                super(props) //超类 将props传递到子类
+                this.state = { date: new Date() }
+            }
+
+            render() {
+                return (
+                    <div>
+                        <p>Hello !!!</p>
+                        <p>It is {this.state.date.toLocaleTimeString()}</p>
+                    </div>
+                )
+            }
+        } */
+
+        // 3.将生命周期方法添加到 Class 中
+        class Clock extends React.Component {
+            constructor(props) {
+                super(props) //超类 将props传递到子类
+                // state 参见vue2.x的data 函数
+                this.state = { date: new Date() }
+            }
+            
+            // 挂在 在组件已经被渲染到 DOM中 后运行
+            componentDidMount() {
+                this.timerID = setInterval(() => {
+                    this.tick()
+                }, 1000);
+            }
+
+            // 卸载 清除计时器
+            componentWillUnMount() {
+                clearInterval(this.timerID)
+            }
+
+            // 实现修改state中值的方法
+            tick(){
+                // this.setState 参见vue2.x的 this.xxx = xxx 复制 或者$set
+                this.setState({
+                    date:new Date()
+                })
+            }
+
+            render() {
+                return (
+                    <div>
+                        <p>Hello !!!</p>
+                        <p>It is {this.state.date.toLocaleTimeString()}</p>
+                    </div>
+                )
+            }
+        }
+        ReactDOM.render(<Clock />, document.getElementById('root'))
     </script>
 </body>
 

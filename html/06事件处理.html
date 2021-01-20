@@ -1,0 +1,111 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-01-19 21:19:27
+ * @LastEditTime: 2021-01-20 16:04:16
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \react-base\html\01hello.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@17.0.1/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.1/umd/react-dom.development.js"></script>
+    <!-- jsx库 -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        /**
+          * 06事件处理
+          * 总结：
+          * 1、React 事件的命名采用小驼峰式（camelCase），而不是纯小写。
+          * 2、使用 JSX 语法时你需要传入一个函数作为事件处理函数，而不是一个字符串
+          * 3、在 React 中另一个不同点是你不能通过返回 false 的方式阻止默认行为。你必须显式的使用 preventDefault()
+        **/
+
+        // 1.阻止默认行为：
+        // e 是一个合成事件,不需要担心浏览器兼容性
+        /* function ActionLink() {
+            function handleClick(e) {
+                e.preventDefault()
+                console.log('被点击了。。。')
+            }
+            return (
+                <a href="#" onClick={handleClick}>点击我</a>
+            )
+        }
+        ReactDOM.render(<ActionLink/>,document.getElementById('root')) */
+
+        // 2. 绑定事件this
+        /* 谨慎对待 JSX 回调函数中的 this，在 JavaScript 中，class 的方法默认不会绑定 this。
+        如果你忘记绑定 this.handleClick 并把它传入了 onClick，当你调用这个函数的时候 this 的值为 undefined */
+        class Toggle extends React.Component {
+            constructor(props) {
+                super(props)
+                this.state = { isToggleOn: true }
+
+                // 为了在回调中使用 `this`，这个绑定是必不可少的
+                // 方法一：绑定this
+                // this.handleClick = this.handleClick.bind(this)
+                console.log('a', this)
+            }
+            // 方法二：使用箭头函数
+            /* handleClick = () => {
+                // 不绑定则this 为undefined
+                console.log('b', this)
+                // 上一个state状态
+                this.setState(state => ({
+                    isToggleOn: !state.isToggleOn
+                }))
+            } */
+
+            handleClick() {
+                // 不绑定则this 为undefined
+                console.log('b', this)
+                // 上一个state状态
+                this.setState(state => ({
+                    isToggleOn: !state.isToggleOn
+                }))
+            }
+
+            handleDelete(id, e) {
+                console.log(id, e)
+            }
+
+            render() {
+                console.log('c', this)
+                /* return (<button onClick={this.handleClick}>{this.state.isToggleOn ? "开" : "关"}</button>) */
+                // 方法三：此语法确保 `handleClick` 内的 `this` 已被绑定。
+                /* return (<button onClick={() => this.handleClick()}>{this.state.isToggleOn ? "开" : "关"}</button>) */
+
+                // 3.向事件处理程序传递参数：
+                /** 
+                 * > React 的事件对象 e 会被作为第二个参数传递。如果通过箭头函数的方式，事件对象必须显式的进行传递，
+                 * > 而通过 bind 的方式，事件对象以及更多的参数将会被隐式的进行传递。
+                **/
+
+                const id = 123
+                return (
+                    <div>
+                        <button onClick={(e) => this.handleDelete(id, e)}>删除A</button>
+                        <button onClick={this.handleDelete.bind(this, id)}>删除B</button>
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(<Toggle />, document.getElementById('root'))
+
+    </script>
+</body>
+
+</html>
