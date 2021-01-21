@@ -1,0 +1,88 @@
+<!--
+    * @Author: your name
+    * @Date: 2021-01-19 21:19:27
+ * @LastEditTime: 2021-01-21 16:38:07
+ * @LastEditors: Please set LastEditors
+    * @Description: In User Settings Edit
+    * @FilePath: \react-base\html\01hello.html
+    -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/reactDev.js"></script>
+    <script src="../js/reactDom.js"></script>
+    <script src="../js/reactBabel.js"></script>
+    <style>
+        .warn {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        /**
+         * 09表单
+         * https://zh-hans.reactjs.org/docs/forms.html
+         * 总结：
+         * 
+        **/
+        // 1.受控组件/textarea标签
+        // 其中，input 的type属性为file 是一个非受控组件，因为它的 value 只读
+        class NameForm extends React.Component {
+            constructor(props) {
+                super(props)
+                this.state = { name: "", text: "请开始你的表演", selected: "apple" }
+                this.handleSubmit = this.handleSubmit.bind(this)
+                this.handleChange = this.handleChange.bind(this)
+            }
+            handleSubmit(e) {
+                const { name, text } = this.state
+                alert(`提交的名字：${name}；输入的文本：${text}`)
+                e.preventDefault()
+            }
+
+            handleChange(e) {
+                this.setState({ name: e.target.value })
+            } 
+
+            render() {
+                const { name, text, selected } = this.state
+                const fruits = [{ key: 'apple', value: '苹果' }, { key: 'banane', value: '香蕉' }, { key: 'orange', value: '橘子' }]
+                return (
+                    <form onSubmit={this.handleSubmit}>
+                        {/* input标签 */}
+                        <label>
+                            名字：<input type="text" value={name} onChange={this.handleChange} />
+                        </label><br />
+
+                        {/* textarea标签 */}
+                        <label>
+                            文本：<textarea type="text" value={text} onChange={(e) => { this.setState({ text: e.target.value }) }} />
+                        </label><br />
+
+                        {/* select标签 */}
+                        <span>选择的水果：{fruits.find(ele => ele.key === selected).value}</span>
+                        <select value={selected} onChange={(e) => { this.setState({ selected: e.target.value }) }}>
+                            {
+                                fruits.map((item) =>
+                                    <option value={item.key} key={item.key}>{item.value}</option>
+                                )
+                            }
+                        </select>
+                        <br />
+                        <input type="submit" value="提交" />
+                    </form>
+                )
+            }
+        }
+        ReactDOM.render(<NameForm />, document.getElementById('root'))
+    </script>
+</body>
+
+</html>
