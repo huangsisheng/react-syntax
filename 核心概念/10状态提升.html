@@ -1,0 +1,143 @@
+<!--
+    * @Author: your name
+    * @Date: 2021-01-19 21:19:27
+ * @LastEditTime: 2021-01-22 11:59:28
+ * @LastEditors: Please set LastEditors
+    * @Description: In User Settings Edit
+    * @FilePath: \react-base\html\01hello.html
+    -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/reactDev.js"></script>
+    <script src="../js/reactDom.js"></script>
+    <script src="../js/reactBabel.js"></script>
+    <style>
+        .warn {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        /**
+         * 10状态提升
+         * 总结：
+         * 
+        **/
+        // 1.温度计
+        function BoilingVerdict(props) {
+            const { celsius } = props
+            if (celsius >= 100) {
+                return <div>The water would boil </div>
+            }
+            return <div>The water would not boil </div>
+        }
+
+        // 2.两种温度单位
+        const scaleNames = {
+            f: 'Fahrenheit',
+            c: 'Celsius'
+        }
+
+        // 3.编写温度转换函数
+        // 转换为摄制度
+        function toCelsius(fahrenheit) {
+            return (fahrenheit - 32) * 5 / 9
+        }
+        // 转换为华氏度
+        function toFahrenheit(celsius) {
+            return (celsius * 9 / 5) + 32
+        }
+        // 根据温度和温度单位输出具体值
+        function tryConvert(temperature, cb) {
+            const _input = parseFloat(temperature)
+            if (Number.isNaN(_input)) {
+                return ""
+            }
+            const _output = cb(_input)
+            const rounded = Math.round(_output * 1000) / 1000
+            return rounded.toString()
+        }
+
+
+        class TemperatureInput extends React.Component {
+            constructor(props) {
+                super(props)
+                this.handleChange = this.handleChange.bind(this)
+            }
+
+            // 使用父组件传递的修改状态的函数
+            handleChange(e) {
+                this.props.onTemperatureChange(e.target.value)
+                // Before
+                // this.setState({
+                //     tempreature: e.target.value
+                // })
+            }
+
+            render() {
+                const tempreature = this.props.tempreature
+                const scale = this.props.scale
+                return (
+                    <fieldset>
+                        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+                        <input type="number" min="0" value={tempreature} onChange={this.handleChange} />
+                    </fieldset>
+                )
+            }
+        }
+
+        /* 4.将多个组件中需要共享的 state 向上移动到它们的最近 共同父组件中，便可实现共享 state。这就是所谓的“状态提升”。 */
+        class Calculator extends React.Component {
+            constructor(props) {
+                super(props)
+                this.state = {
+                    tempreature: 0,
+                    scale: 'c'
+                }
+            }
+
+            handleChangeClesius = (tempreature) => {
+                this.setState({
+                    tempreature,
+                    scale: 'c'
+                })
+            }
+
+            handleChangeFahrenheit = (tempreature) => {
+                this.setState({
+                    tempreature,
+                    scale: 'f'
+                })
+            }
+
+            render() {
+
+                const { tempreature, scale } = this.state
+
+                const celsius = scale === 'f' ? tryConvert(tempreature, toCelsius) : tempreature
+                const fahrenheit = scale === 'c' ? tryConvert(tempreature, toFahrenheit) : tempreature
+
+                return (
+                    <div>
+                        <TemperatureInput scale="c" tempreature={celsius} onTemperatureChange={this.handleChangeClesius} />
+                        <TemperatureInput scale="f" tempreature={fahrenheit} onTemperatureChange={this.handleChangeFahrenheit} />
+                        <BoilingVerdict celsius={parseFloat(celsius)} />
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(<Calculator />, document.getElementById('root'))
+
+    </script>
+</body>
+
+</html>
