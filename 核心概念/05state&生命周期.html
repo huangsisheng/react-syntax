@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-01-19 21:19:27
- * @LastEditTime: 2021-01-20 22:24:47
+ * @LastEditTime: 2021-01-25 15:43:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \react-base\html\01hello.html
@@ -74,28 +74,56 @@
                 // state 参见vue2.x的data 函数
                 this.state = { date: new Date() }
             }
-            
-            // 挂在 在组件已经被渲染到 DOM中 后运行
+
+
+            /* 生命周期函数 S */
+            // 组件将要挂载
+            componentWillMount() {
+                console.log('componentWillMount...')
+            }
+
+            // 组件挂载完成 一般用于获取数据
+            // 挂载 在组件已经被渲染到 DOM中 后运行
             componentDidMount() {
+                console.log('componentDidMount...')
                 this.timerID = setInterval(() => {
                     this.tick()
                 }, 1000);
             }
-
-            // 卸载 清除计时器
+            // 是否要更新数据时触发函数
+            shouldComponentUpdate() {
+                return true
+                console.log('shouldComponentUpdate...')
+            }
+            // 将要更新数据
+            componentWillUpdate() {
+                console.log('componentWillUpdate...')
+            }
+            // 数据更新完成
+            componentDidUpdate() {
+                console.log('componentDidUpdate...')
+            }
+            // 组件将要销毁 清除计时器
             componentWillUnMount() {
+                console.log('componentWillUnMount...')
                 clearInterval(this.timerID)
             }
+            // 父组件中改变了props传值时触发的函数
+            componentWillReveiveProps() {
+                console.log('componentWillReveiveProps...')
+            }
+            /* 生命周期函数 E */
 
             // 实现修改state中值的方法
-            tick(){
+            tick() {
                 // this.setState 参见vue2.x的 this.xxx = xxx 复制 或者$set
                 this.setState({
-                    date:new Date()
+                    date: new Date()
                 })
             }
 
             render() {
+                console.log('render...')
                 return (
                     <div>
                         <p>Hello !!!</p>

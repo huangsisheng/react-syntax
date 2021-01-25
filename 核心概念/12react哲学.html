@@ -1,0 +1,252 @@
+<!--
+    * @Author: your name
+    * @Date: 2021-01-19 21:19:27
+ * @LastEditTime: 2021-01-25 16:45:36
+ * @LastEditors: Please set LastEditors
+    * @Description: In User Settings Edit
+    * @FilePath: \react-base\html\01hello.html
+    -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/reactDev.js"></script>
+    <script src="../js/reactDom.js"></script>
+    <script src="../js/reactBabel.js"></script>
+    <style>
+        .warn {
+            color: red;
+        }
+
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .pord-table-title {
+            margin: 10px 0;
+        }
+
+        .pord-table-item {
+            margin-bottom: 10px;
+        }
+
+        .table-title-item {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .table-title-item,
+        .item-name {
+            margin-right: 30px;
+        }
+
+        .prod-number {
+            color: red;
+            margin: 0 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        /**
+         * 12react哲学
+         * 总结：
+         * 1. 
+         * 
+        **/
+        const dataList = [
+            { id: 1, category: "Sporting Goods", price: "$49.99", stocked: true, name: "Football" },
+            { id: 2, category: "Sporting Goods", price: "$9.99", stocked: true, name: "Baseball" },
+            { id: 3, category: "Sporting Goods", price: "$29.99", stocked: false, name: "Basketball" },
+            { id: 4, category: "Electronics", price: "$99.99", stocked: true, name: "iPod Touch" },
+            { id: 5, category: "Electronics", price: "$399.99", stocked: false, name: "iPhone 5" },
+            { id: 6, category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 7" }
+        ];
+
+        // 实现一个searchList
+
+        // 搜索条
+        class SearchBar extends React.Component {
+            constructor(props) {
+                super(props)
+                this.handleInput = this.handleInput.bind(this)
+            }
+
+            handleInput(e) {
+                // 传递数据给父级状态
+                this.props.search(e.target.value)
+            }
+            render() {
+                return (
+                    <input type="text" value={this.props.input} onInput={this.handleInput} />
+                )
+            }
+        }
+
+
+        // 数据展示列表
+        class TableList extends React.Component {
+            constructor(props) {
+                super(props)
+                this.handleChecked = this.handleChecked.bind(this)
+            }
+
+            handleChecked(res) {
+                // console.log(res)
+                this.props.select(res)
+            }
+
+            // componentWillReveiveProps(){
+            //     this.setState({
+            //         tableList: this.props.filterList
+            //     })
+            // }
+
+            render() {
+                const { titleList, filterList } = this.props
+                return (
+                    <div className="pord-table">
+                        <div className="pord-table-title">
+                            {
+                                titleList.map(item =>
+                                    <span className="table-title-item" key={item.id}>
+                                        {item.title}
+                                    </span>
+                                )
+                            }
+                        </div>
+                        <ul>
+                            {
+                                filterList.map(item =>
+                                    <li className="pord-table-item" key={item.id}>
+                                        <span className="item-name">{item.name}</span>
+                                        <span className="item-name">{item.price}</span>
+                                        <input type="checkbox" defaultChecked={item.stocked} value={item.stocked} onChange={this.handleChecked(item)} />
+                                    </li>
+                                )
+                            }
+                        </ul>
+                    </div>
+                )
+            }
+        }
+
+        // 父级组件 统一维护状态
+        class ProdTable extends React.Component {
+            constructor(props) {
+                super(props)
+                this.state = {
+                    filterList: [],
+                    titleList: [{ title: '名称', id: 1 }, { title: '价格', id: 2 }],
+                    input: "",
+                    mutipleList: []
+                }
+                this.handleSearch = this.handleSearch.bind(this)
+                this.handleFilter = this.handleFilter.bind(this)
+                this.handleSelect = this.handleSelect.bind(this)
+            }
+
+            /* 生命周期函数 S */
+            // 组件将要挂载
+            componentWillMount() { }
+            // 组件挂载完成 一般用于获取数据
+            componentDidMount() {
+                this.initData()
+            }
+            // 是否要更新数据时触发函数
+            shouldComponentUpdate() {
+                return true
+            }
+            // 将要更新数据
+            componentWillUpdate() { }
+            // 数据更新完成
+            componentDidUpdate() {
+            }
+            // 组件将要销毁
+            componentWillUnMount() { }
+            // 父组件中改变了props传值时触发的函数
+            componentWillReveiveProps() { }
+            /* 生命周期函数 E */
+
+            initData() {
+                this.setState((state) => ({
+                    filterList: dataList,
+                    mutipleList: dataList.length > 0 ? dataList.filter(item => item.stocked) : []
+                }))
+            }
+
+            handleSearch(res) {
+                this.setState({
+                    input: res.toLowerCase()
+                })
+                this.handleFilter()
+            }
+
+            // 搜索过滤
+            handleFilter() {
+                this.setState((state) => (
+                    {
+                        filterList: state.input ? state.filterList.filter((item) => item.name.toLowerCase().includes(state.input)) : dataList
+                    }
+                ))
+            }
+
+            // 选中的数据
+            handleSelect (res) {
+                setTimeout(() => {
+                    console.log(res, this)
+                    if (this.state.mutipleList.length > 0) {
+                        for (let i = 0; i < this.state.mutipleList.length; i++) {
+                            const element = this.state.mutipleList[i];
+                            if (element.name === res.name && res.stocked) {
+                                this.setState((state) => ({
+                                    mutipleList: state.mutipleList.splice(i, 1)
+                                }))
+                                i--
+                            } else {
+                                this.setState((state) => ({
+                                    mutipleList: state.mutipleList.push(res)
+                                }))
+                            }
+                        }
+                    } else {
+                        this.setState({
+                            mutipleList: []
+                        })
+                    }
+                }, 0);
+
+            }
+
+            render() {
+                const { titleList, filterList, mutipleList } = this.state
+                return (
+                    <div>
+                        <h2>--搜索列表--</h2>
+                        <p>已选中产品:<span className="prod-number">{mutipleList.length}</span>个</p>
+                        <SearchBar search={this.handleSearch} />
+                        <TableList filterList={filterList} titleList={titleList}  />
+                        {/* select={this.handleSelect} */}
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(<ProdTable />, document.getElementById('root'))
+
+    </script>
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 <!--
     * @Author: your name
     * @Date: 2021-01-19 21:19:27
- * @LastEditTime: 2021-01-22 15:53:18
+ * @LastEditTime: 2021-01-25 14:13:25
  * @LastEditors: Please set LastEditors
     * @Description: In User Settings Edit
     * @FilePath: \react-base\html\01hello.html
@@ -29,8 +29,116 @@
         /**
          * 11组合vs继承
          * 总结：
+         * 1. 子组件中使用props.children把父组件传递的组件块展示出来
+         * 2.包含关系参见vue 的父子组件关系
+         * 3.react中没有插槽的概念，但可以借鉴vue来理解
+         * 
+         * 关于继承：
+         * 如果你想要在组件间复用非 UI 的功能，我们建议将其提取为一个单独的 JavaScript 模块，
+         * 如函数、对象或者类。组件可以直接引入（import）而无需通过 extend 继承它们。
          * 
         **/
+        // 1.包含关系
+        function FancyBorder(props) {
+            console.log(props)
+            return (
+                <div className={`fancyBorder-${props.color}`}>
+                    {props.children}
+                </div>
+            )
+        }
+        // /**
+        //  * <FancyBorder> JSX 标签中的所有内容都会作为一个 children prop 传递给 FancyBorder 组件。
+        //  * 因为 FancyBorder 将 {props.children} 渲染在一个 <div> 中，
+        //  * 被传递的这些子组件最终都会出现在输出结果中。
+        //  */
+        // function WelcomeDiaolg(props) {
+        //     return (
+        //         <FancyBorder color="blue">
+        //             <h1 className="Dialog-title">
+        //                 Welcome
+        //             </h1>
+        //             <p className="Dialog-message">
+        //                 Thank you for visiting our spacecraft!
+        //             </p>
+        //         </FancyBorder>
+        //     )
+        // }
+        // ReactDOM.render(<WelcomeDiaolg />, document.getElementById('root'))
+
+
+        /* 预留洞，类似与vue的插槽 */
+        function SplitPane(props) {
+            return (
+                <div className="SplitPane">
+                    <div className="SplitPane-left">
+                        {/* 类似vue的插槽 */}
+                        {props.left}
+                    </div>
+                    <div className="SplitPane-right">
+                        {props.right}
+                    </div>
+                </div>
+            )
+        }
+        function App(props) {
+            return (
+                <div>
+                    {/* 类似vue的插槽 */}
+                    <SplitPane
+                        left={'is left'}
+                        right={'is right'}
+                    />
+                </div>
+            )
+        }
+        ReactDOM.render(<App />, document.getElementById('root'))
+
+        // 2.特例关系, 参照vue父组件->子组件传参
+        function Dialog(props) {
+            return (
+                <div>
+                    <h1 className="Dialog-title">{props.title}</h1>
+                    <p className="Dialog-message">{props.message}</p>
+                    {props.children}
+                </div>
+            )
+        }
+        function WelcomeDiaolg(props) {
+            return (
+                <Dialog title="Welcome" message="Thank you for visiting our spacecraft!" />
+            )
+        }
+        ReactDOM.render(<WelcomeDiaolg />, document.getElementById('root'))
+
+        // class形式
+        class SignUpDialog extends React.Component {
+            constructor(props) {
+                super(props)
+                this.state = { login: '' }
+            }
+            handleChange = (e) => {
+                this.setState({
+                    login: e.target.value
+                })
+            }
+            handleSignUp = () => {
+                alert('欢迎登录：'+this.state.login)
+            }
+            render() {
+
+                return (
+                    <div>
+                        <Dialog title="登录" message="哈哈哈">
+                            <input type="text" onChange={this.handleChange} />
+                            <button onClick={this.handleSignUp}>login</button>
+                        </Dialog>
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(<SignUpDialog />, document.getElementById('root'))
 
     </script>
 </body>
