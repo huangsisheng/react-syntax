@@ -1,7 +1,7 @@
 <!--
     * @Author: your name
     * @Date: 2021-01-19 21:19:27
- * @LastEditTime: 2021-01-25 16:45:36
+ * @LastEditTime: 2021-01-25 19:53:40
  * @LastEditors: Please set LastEditors
     * @Description: In User Settings Edit
     * @FilePath: \react-base\html\01hello.html
@@ -155,7 +155,6 @@
                 }
                 this.handleSearch = this.handleSearch.bind(this)
                 this.handleFilter = this.handleFilter.bind(this)
-                this.handleSelect = this.handleSelect.bind(this)
             }
 
             /* 生命周期函数 S */
@@ -205,29 +204,29 @@
 
             // 选中的数据
             handleSelect (res) {
-                setTimeout(() => {
-                    console.log(res, this)
-                    if (this.state.mutipleList.length > 0) {
-                        for (let i = 0; i < this.state.mutipleList.length; i++) {
-                            const element = this.state.mutipleList[i];
-                            if (element.name === res.name && res.stocked) {
-                                this.setState((state) => ({
-                                    mutipleList: state.mutipleList.splice(i, 1)
-                                }))
-                                i--
-                            } else {
-                                this.setState((state) => ({
-                                    mutipleList: state.mutipleList.push(res)
-                                }))
-                            }
-                        }
-                    } else {
-                        this.setState({
-                            mutipleList: []
-                        })
-                    }
-                }, 0);
-
+                console.log(res, this)
+                let that = this
+                // setTimeout(() => {
+                //     if (that.state.mutipleList.length > 0) {
+                //         for (let i = 0; i < that.state.mutipleList.length; i++) {
+                //             const element = that.state.mutipleList[i];
+                //             if (element.name === res.name && res.stocked) {
+                //                 that.setState((state) => ({
+                //                     mutipleList: state.mutipleList.splice(i, 1)
+                //                 }))
+                //                 i--
+                //             } else {
+                //                 that.setState((state) => ({
+                //                     mutipleList: state.mutipleList.push(res)
+                //                 }))
+                //             }
+                //         }
+                //     } else {
+                //         that.setState({
+                //             mutipleList: []
+                //         })
+                //     }
+                // }, 0);
             }
 
             render() {
@@ -237,8 +236,7 @@
                         <h2>--搜索列表--</h2>
                         <p>已选中产品:<span className="prod-number">{mutipleList.length}</span>个</p>
                         <SearchBar search={this.handleSearch} />
-                        <TableList filterList={filterList} titleList={titleList}  />
-                        {/* select={this.handleSelect} */}
+                        <TableList filterList={filterList} titleList={titleList} select={this.handleSelect.bind(this)}/>
                     </div>
                 )
             }
