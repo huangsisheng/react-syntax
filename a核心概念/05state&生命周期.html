@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-01-19 21:19:27
- * @LastEditTime: 2021-01-25 15:43:58
+ * @LastEditTime: 2021-01-28 21:06:25
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \react-base\html\01hello.html
@@ -35,6 +35,34 @@
           * 3.state更新会被合并
           * 4.不要直接修改state, 使用setState()
           * 5.数据流向：自上而下
+          * 
+          * 生命周期执行顺序：
+          * 
+          * a.初始化阶段：
+          *     创建state、props等
+          * 
+          * b.组件挂载阶段：
+          *     componentWillMount -> 将要挂载
+          *     render -> 渲染组件
+          *     componentDidMount -> 挂载完毕
+          * 
+          * c.数据更新阶段(update)：
+          *     1.props更新：
+          *         componentWillReceiveProps -> 父组件改变props触发
+          *         shouldComponentUpdate -> 是否更新数据时触发，否则结束，是继续往下。
+          *         componentWillUpdate -> 数据将要更新
+          *         render ->
+          *         componentDidUpdate
+          *     2.state更新：
+          *         shouldComponentUpdate -> 是否更新数据时触发，否则结束，是继续往下。
+          *         componentWillUpdate -> 数据将要更新
+          *         render ->
+          *         componentDidUpdate
+          * 
+          * d.组件卸载阶段：
+          *     componentWillUnMount -> 组件将要卸载
+          * 
+          * 父子组件的挂载、更新、卸载生命周期执行顺序同vue一样
         **/
         // 实现一个完整版的计时器
 
